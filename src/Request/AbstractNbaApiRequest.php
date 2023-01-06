@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace JasonRoman\NbaApi\Request;
 
@@ -29,9 +31,9 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
     const PLACEHOLDER_END   = '}';
 
     // default regex looks like the following: /{\K[^}]*(?=})/m
-    const REGEX_GET_ENDPOINT_VARS = '/'.
-        self::PLACEHOLDER_START.'\K[^'.self::PLACEHOLDER_END.']*(?='.self::PLACEHOLDER_END.')'.
-    '/m';
+    const REGEX_GET_ENDPOINT_VARS = '/' .
+        self::PLACEHOLDER_START . '\K[^' . self::PLACEHOLDER_END . ']*(?=' . self::PLACEHOLDER_END . ')' .
+        '/m';
 
     // default time to wait for responses from the API
     const TIMEOUT         = 10;
@@ -46,11 +48,11 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
     const DEFAULT_HEADERS = [
         // required headers
         'User-Agent'      =>
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '.
-            'AppleWebKit/537.36 (KHTML, like Gecko) '.
-            'Chrome/61.0.3163.100 '.
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/61.0.3163.100 ' .
             'Safari/537.36',
-        'Origin'          => 'http://stats.nba.com',
+        'Origin'          => 'https://stats.nba.com',
         // this will be overridden by the response type of the individual request
         'Accept'          => 'application/json, text/plain, */*',
         // optional headers that might help prevent timeouts
@@ -58,7 +60,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
         'Accept-Language' => 'en-US,en;q=0.8,af;q=0.6',
         'Accept-Encoding' => 'gzip, deflate, sdch',
         'Host'            => 'stats.nba.com',
-        'Referer'         => 'http://stats.nba.com',
+        'Referer'         => 'https://stats.nba.com',
         'Content-Type'    => 'application/json',
         'Connection'      => 'keep-alive',
         'Cache-Control'   => 'no-cache, no-store, must-revalidate',
@@ -134,7 +136,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
                 throw new \Exception(sprintf("Missing class member value '%s' for request", $endpointVar));
             }
 
-            $endpoint = str_replace('{'.$endpointVar.'}', $this->convertParamValueToString($endpointVar), $endpoint);
+            $endpoint = str_replace('{' . $endpointVar . '}', $this->convertParamValueToString($endpointVar), $endpoint);
         }
 
         return $endpoint;
@@ -304,7 +306,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
 
         // use the property if it exists in the corresponding method of the request class
         // this is the plural of the method name; as in getDefaultValue() calls getDefaultValues() here
-        $requestValues = $requestClass::{$methodName.'s'}();
+        $requestValues = $requestClass::{$methodName . 's'}();
 
         if (array_key_exists($propertyName, $requestValues)) {
             return $requestValues[$propertyName];
@@ -364,7 +366,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
             '%s%s%s',
             static::getBaseUri(),
             $this->getEndpoint(),
-            ($queryString) ? '/?'.$queryString : ''
+            ($queryString) ? '/?' . $queryString : ''
         );
     }
 
@@ -375,7 +377,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
      */
     public function getFullBaseEndpoint(): string
     {
-        return static::BASE_URI.static::ENDPOINT;
+        return static::BASE_URI . static::ENDPOINT;
     }
 
     /**
@@ -479,7 +481,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
     public static function getMainNamespaceAndRequest(): string
     {
         if (substr(static::class, 0, strlen(static::BASE_NAMESPACE)) !== static::BASE_NAMESPACE) {
-            throw new \Exception("Request must have root namespace of '".static::BASE_NAMESPACE."'");
+            throw new \Exception("Request must have root namespace of '" . static::BASE_NAMESPACE . "'");
         }
 
         return substr(static::class, strlen(static::BASE_NAMESPACE) + 1);
@@ -546,7 +548,7 @@ abstract class AbstractNbaApiRequest implements NbaApiRequestInterface
     public static function getRequestName(): string
     {
         if (substr(static::class, -strlen(static::REQUEST_SUFFIX)) !== static::REQUEST_SUFFIX) {
-            throw new \Exception("Request class name must end with '".static::REQUEST_SUFFIX."'");
+            throw new \Exception("Request class name must end with '" . static::REQUEST_SUFFIX . "'");
         }
 
         return substr(static::getMainNamespaceAndRequestParts()[3], 0, -strlen(static::REQUEST_SUFFIX));

@@ -6,7 +6,7 @@ use JasonRoman\NbaApi\Request\AbstractNbaApiRequest;
 
 abstract class AbstractStatsRequest extends AbstractNbaApiRequest
 {
-    const BASE_URI = 'http://stats.nba.com';
+    const BASE_URI = 'https://stats.nba.com';
 
     const CONFIG = [
         'base_uri' => self::BASE_URI,
